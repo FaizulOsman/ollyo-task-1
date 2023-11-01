@@ -4,7 +4,9 @@ import Product from "../../components/Product";
 
 const Home = () => {
   const [allProducts, setAllProducts] = useState([]);
-  console.log(allProducts);
+  const [selectedProducts, setSelectedProducts] = useState([]);
+  console.log(selectedProducts);
+
   const loadData = async () => {
     const res = await fetch("http://localhost:5000/api/v1/products");
     const data = await res.json();
@@ -43,15 +45,53 @@ const Home = () => {
     }
   };
 
+  const handleDeleteProducts = async () => {
+    const response = await fetch(
+      "http://localhost:5000/api/v1/products/delete",
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(selectedProducts),
+      }
+    );
+    console.log(response);
+
+    if (response.ok) {
+      console.log("Successfully deleted products");
+    } else {
+      console.error("Failed to delete products");
+    }
+  };
+
   useEffect(() => {
     loadData();
   }, []);
+
+  const handleCheck = (id, e) => {
+    if (e.target.checked) {
+      setSelectedProducts((prevSelectedProducts) => {
+        if (!prevSelectedProducts.includes(id)) {
+          return [...prevSelectedProducts, id];
+        }
+      });
+    } else {
+      setSelectedProducts((prevSelectedProducts) => {
+        if (prevSelectedProducts.includes(id)) {
+          return prevSelectedProducts.filter((selectedId) => selectedId !== id);
+        }
+      });
+    }
+  };
 
   return (
     <main className="main-container main-section">
       <div className="header">
         <h1 className="heading">Gallery</h1>
-        <h3 className="delete__btn">Delete files</h3>
+        <h3 onClick={() => handleDeleteProducts()} className="delete__btn">
+          Delete files
+        </h3>
       </div>
       <div className="products-section">
         {allProducts.map((product, index) => (
@@ -68,8 +108,11 @@ const Home = () => {
               product={product}
             />
             <div className="check">
-              <input type="checkbox" />
-              <span class="checkmark"></span>
+              <input
+                type="checkbox"
+                onClick={(e) => handleCheck(product?.id, e)}
+              />
+              <span className="checkmark"></span>
             </div>
           </label>
         ))}

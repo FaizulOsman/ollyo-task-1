@@ -7,7 +7,6 @@ const Product = ({
   onDragOver,
   product,
 }) => {
-  console.log(product.imageUrl);
   return (
     <div
       className="product"
