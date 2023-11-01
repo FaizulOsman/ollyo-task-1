@@ -48,11 +48,14 @@ const Home = () => {
   }, []);
 
   return (
-    <main>
+    <main className="main-container">
       <h1>List</h1>
       <div className="products-section">
         {allProducts.map((product, index) => (
-          <label key={index} class="single-product">
+          <label
+            key={index}
+            className={`single-product ${index === 0 ? "wider" : ""}`}
+          >
             <Product
               draggable
               onDragStart={() => (dragPerson.current = index)}

@@ -18,12 +18,12 @@ const Product = ({
       onDragOver={onDragOver}
     >
       <div
-        className="product__image"
-        style={{
-          backgroundImage: `url(${product.imageUrl})`,
-        }}
+      // className="product__image"
+      // style={{
+      //   backgroundImage: `url(${product.imageUrl})`,
+      // }}
       >
-        {/* <img className="product__image" src={product.imageUrl} alt="Product" /> */}
+        <img className="product__image" src={product.imageUrl} alt="Product" />
       </div>
     </div>
   );
