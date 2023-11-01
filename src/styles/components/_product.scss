@@ -1,0 +1,9 @@
+.products-section {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  .single-product__image {
+    width: 200px;
+    height: 200px;
+  }
+}

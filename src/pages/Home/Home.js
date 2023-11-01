@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import ImageUpload from "../../components/ImageUpload";
+import Product from "../../components/Product";
 
 const Home = () => {
   const [allProducts, setAllProducts] = useState([]);
@@ -8,29 +9,6 @@ const Home = () => {
     const res = await fetch("http://localhost:5000/api/v1/products");
     const data = await res.json();
     setAllProducts(data?.data);
-  };
-
-  const updateProducts = async () => {
-    try {
-      const response = await fetch(
-        "http://localhost:5000/api/v1/products/update",
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ imageUrl: "test.jpg" }),
-        }
-      );
-
-      if (response.ok) {
-        console.log("Successfully updated products");
-      } else {
-        console.error("Failed to update products");
-      }
-    } catch (error) {
-      console.error("Error updating products:", error);
-    }
   };
 
   const dragPerson = useRef(0);
@@ -42,30 +20,52 @@ const Home = () => {
     productClone[dragPerson.current] = productClone[draggedOverPerson.current];
     productClone[draggedOverPerson.current] = temp;
     setAllProducts(productClone);
-    updateProducts();
   }
+
+  const handleUploadImage = async (imageUrl) => {
+    const data = { imageUrl: imageUrl };
+
+    const response = await fetch(
+      "http://localhost:5000/api/v1/products/create-product",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
+
+    if (response.ok) {
+      console.log("Successfully updated products");
+    } else {
+      console.error("Failed to update products");
+    }
+  };
 
   useEffect(() => {
     loadData();
   }, []);
 
   return (
-    <main className="flex min-h-screen flex-col items-center space-y-4">
-      <h1 className="text-xl font-bold mt-4">List</h1>
-      {allProducts.map((product, index) => (
-        <div
-          key={index}
-          className="relative flex space-x-3 border rounded p-2 bg-gray-100"
-          draggable
-          onDragStart={() => (dragPerson.current = index)}
-          onDragEnter={() => (draggedOverPerson.current = index)}
-          onDragEnd={handleSort}
-          onDragOver={(e) => e.preventDefault()}
-        >
-          <p>{product.imageUrl}</p>
-        </div>
-      ))}
-      <ImageUpload />
+    <main>
+      <h1>List</h1>
+      <div className="products-section">
+        {allProducts.map((product, index) => (
+          <div
+            className="single-product"
+            key={index}
+            draggable
+            onDragStart={() => (dragPerson.current = index)}
+            onDragEnter={() => (draggedOverPerson.current = index)}
+            onDragEnd={handleSort}
+            onDragOver={(e) => e.preventDefault()}
+          >
+            <Product product={product} />
+          </div>
+        ))}
+      </div>
+      <ImageUpload handleUploadImage={handleUploadImage} />
     </main>
   );
 };
