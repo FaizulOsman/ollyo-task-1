@@ -52,17 +52,20 @@ const Home = () => {
       <h1>List</h1>
       <div className="products-section">
         {allProducts.map((product, index) => (
-          <div
-            className="single-product"
-            key={index}
-            draggable
-            onDragStart={() => (dragPerson.current = index)}
-            onDragEnter={() => (draggedOverPerson.current = index)}
-            onDragEnd={handleSort}
-            onDragOver={(e) => e.preventDefault()}
-          >
-            <Product product={product} />
-          </div>
+          <label key={index} class="single-product">
+            <Product
+              draggable
+              onDragStart={() => (dragPerson.current = index)}
+              onDragEnter={() => (draggedOverPerson.current = index)}
+              onDragEnd={handleSort}
+              onDragOver={(e) => e.preventDefault()}
+              product={product}
+            />
+            <div className="check">
+              <input type="checkbox" />
+              <span class="checkmark"></span>
+            </div>
+          </label>
         ))}
       </div>
       <ImageUpload handleUploadImage={handleUploadImage} />
