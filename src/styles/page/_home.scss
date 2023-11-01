@@ -1,0 +1,27 @@
+.main-section {
+  background-color: #fff;
+  margin: 20px auto 60px;
+  border-radius: 5px;
+
+  .header {
+    border-bottom: 2px solid rgb(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+
+    .heading {
+      margin: 0;
+    }
+
+    .delete__btn {
+      color: red;
+      font-size: 18px;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}

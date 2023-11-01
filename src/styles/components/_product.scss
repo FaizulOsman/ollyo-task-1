@@ -2,6 +2,7 @@
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 20px;
+  padding: 20px 40px;
   .wider {
     grid-column: span 2;
     grid-row: span 2;

@@ -48,8 +48,11 @@ const Home = () => {
   }, []);
 
   return (
-    <main className="main-container">
-      <h1>List</h1>
+    <main className="main-container main-section">
+      <div className="header">
+        <h1 className="heading">Gallery</h1>
+        <h3 className="delete__btn">Delete files</h3>
+      </div>
       <div className="products-section">
         {allProducts.map((product, index) => (
           <label
@@ -70,8 +73,8 @@ const Home = () => {
             </div>
           </label>
         ))}
+        <ImageUpload handleUploadImage={handleUploadImage} />
       </div>
-      <ImageUpload handleUploadImage={handleUploadImage} />
     </main>
   );
 };
