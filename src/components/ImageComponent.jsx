@@ -1,15 +1,15 @@
 import React from "react";
 
-const Product = ({
+const ImageComponent = ({
   onDragStart,
   onDragEnter,
   onDragEnd,
   onDragOver,
-  product,
+  image,
 }) => {
   return (
     <div
-      className="product"
+      className="image"
       draggable
       onDragStart={onDragStart}
       onDragEnter={onDragEnter}
@@ -17,15 +17,19 @@ const Product = ({
       onDragOver={onDragOver}
     >
       <div
-      // className="product__image"
+      // className="gallery__image"
       // style={{
-      //   backgroundImage: `url(${product.imageUrl})`,
+      //   backgroundImage: `url(${image.imageUrl})`,
       // }}
       >
-        <img className="product__image" src={product.imageUrl} alt="Product" />
+        <img
+          className="gallery__image"
+          src={image.imageUrl}
+          alt="gallery_image"
+        />
       </div>
     </div>
   );
 };
 
-export default Product;
+export default ImageComponent;

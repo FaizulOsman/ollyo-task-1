@@ -1,4 +1,4 @@
-.products-section {
+.images-section {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 20px;
@@ -6,11 +6,11 @@
   .wider {
     grid-column: span 2;
     grid-row: span 2;
-    .product__image {
+    .gallery__image {
       height: 400px !important;
     }
   }
-  .single-product {
+  .single-image {
     display: block;
     position: relative;
     margin-bottom: 12px;
@@ -23,9 +23,9 @@
     border: 2px solid rgba(0, 0, 0, 0.2);
     border-radius: 5px;
 
-    // Product
-    .product {
-      .product__image {
+    // Image
+    .image {
+      .gallery__image {
         // background-repeat: no-repeat;
         // background-position: center center;
         // background-size: 100% 100%;

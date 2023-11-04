@@ -1,116 +1,96 @@
 import React, { useEffect, useRef, useState } from "react";
 import ImageUpload from "../../components/ImageUpload";
-import Product from "../../components/Product";
+import {
+  useDeleteImagesMutation,
+  useGetAllDataQuery,
+  useInsertImageMutation,
+} from "../../redux/features/gallery/galleryApi";
+import ImageComponent from "../../components/ImageComponent";
 
 const Home = () => {
-  const [allProducts, setAllProducts] = useState([]);
-  const [selectedProducts, setSelectedProducts] = useState([]);
-  console.log(selectedProducts);
+  const [allImages, setAllImages] = useState([]);
+  const [selectedImages, setSelectedImages] = useState([]);
 
-  const loadData = async () => {
-    const res = await fetch("http://localhost:5000/api/v1/products");
-    const data = await res.json();
-    setAllProducts(data?.data);
-  };
+  // Data queries
+  const [
+    insertImage,
+    {
+      isSuccess: isInsertImageSuccess,
+      isError: isInsertImageError,
+      error: insertImageError,
+    },
+  ] = useInsertImageMutation();
+  const { data: getAllData } = useGetAllDataQuery();
+  const [deleteImages, { isSuccess, isError, error }] =
+    useDeleteImagesMutation();
+  console.log(getAllData?.data);
 
   const dragPerson = useRef(0);
   const draggedOverPerson = useRef(0);
 
   function handleSort() {
-    const productClone = [...allProducts];
-    const temp = productClone[dragPerson.current];
-    productClone[dragPerson.current] = productClone[draggedOverPerson.current];
-    productClone[draggedOverPerson.current] = temp;
-    setAllProducts(productClone);
+    const imageClone = [...allImages];
+    const temp = imageClone[dragPerson.current];
+    imageClone[dragPerson.current] = imageClone[draggedOverPerson.current];
+    imageClone[draggedOverPerson.current] = temp;
+    setAllImages(imageClone);
   }
 
   const handleUploadImage = async (imageUrl) => {
     const data = { imageUrl: imageUrl };
-
-    const response = await fetch(
-      "http://localhost:5000/api/v1/products/create-product",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      }
-    );
-
-    if (response.ok) {
-      console.log("Successfully updated products");
-    } else {
-      console.error("Failed to update products");
-    }
+    insertImage(data);
   };
 
-  const handleDeleteProducts = async () => {
-    const response = await fetch(
-      "http://localhost:5000/api/v1/products/delete",
-      {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(selectedProducts),
-      }
-    );
-    console.log(response);
+  const handleDeleteImages = async () => {
+    deleteImages(selectedImages);
+  };
 
-    if (response.ok) {
-      console.log("Successfully deleted products");
+  const handleCheck = (id, e) => {
+    if (e.target.checked) {
+      setSelectedImages((prevSelectedImages) => {
+        if (!prevSelectedImages.includes(id)) {
+          return [...prevSelectedImages, id];
+        }
+      });
     } else {
-      console.error("Failed to delete products");
+      setSelectedImages((prevSelectedImages) => {
+        if (prevSelectedImages.includes(id)) {
+          return prevSelectedImages.filter((selectedId) => selectedId !== id);
+        }
+      });
     }
   };
 
   useEffect(() => {
-    loadData();
-  }, []);
-
-  const handleCheck = (id, e) => {
-    if (e.target.checked) {
-      setSelectedProducts((prevSelectedProducts) => {
-        if (!prevSelectedProducts.includes(id)) {
-          return [...prevSelectedProducts, id];
-        }
-      });
-    } else {
-      setSelectedProducts((prevSelectedProducts) => {
-        if (prevSelectedProducts.includes(id)) {
-          return prevSelectedProducts.filter((selectedId) => selectedId !== id);
-        }
-      });
-    }
-  };
+    setAllImages(getAllData?.data);
+  }, [getAllData?.data]);
 
   return (
     <main className="main-container main-section">
       <div className="header">
         <h1 className="heading">Gallery</h1>
-        <h3 onClick={() => handleDeleteProducts()} className="delete__btn">
+        <h3 onClick={() => handleDeleteImages()} className="delete__btn">
           Delete files
         </h3>
       </div>
-      <div className="products-section">
-        {allProducts.map((product, index) => (
+      <div className="images-section">
+        {allImages?.map((image, index) => (
           <label
             key={index}
-            className={`single-product ${index === 0 ? "wider" : ""}`}
+            className={`single-image ${index === 0 ? "wider" : ""}`}
           >
-            <Product
+            <ImageComponent
               draggable
               onDragStart={() => (dragPerson.current = index)}
               onDragEnter={() => (draggedOverPerson.current = index)}
               onDragEnd={handleSort}
               onDragOver={(e) => e.preventDefault()}
-              product={product}
+              image={image}
             />
             <div className="check">
               <input
                 type="checkbox"
-                onClick={(e) => handleCheck(product?.id, e)}
+                onClick={(e) => handleCheck(image?.id, e)}
               />
               <span className="checkmark"></span>
             </div>
