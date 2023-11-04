@@ -6,6 +6,7 @@ import {
   useInsertImageMutation,
 } from "../../redux/features/gallery/galleryApi";
 import ImageComponent from "../../components/ImageComponent";
+import toast from "react-hot-toast";
 
 const Home = () => {
   const [allImages, setAllImages] = useState([]);
@@ -21,9 +22,14 @@ const Home = () => {
     },
   ] = useInsertImageMutation();
   const { data: getAllData } = useGetAllDataQuery();
-  const [deleteImages, { isSuccess, isError, error }] =
-    useDeleteImagesMutation();
-  console.log(getAllData?.data);
+  const [
+    deleteImages,
+    {
+      isSuccess: isDeleteImagesSuccess,
+      isError: isDeleteImagesError,
+      error: deleteImagesError,
+    },
+  ] = useDeleteImagesMutation();
 
   const dragPerson = useRef(0);
   const draggedOverPerson = useRef(0);
@@ -63,7 +69,31 @@ const Home = () => {
 
   useEffect(() => {
     setAllImages(getAllData?.data);
-  }, [getAllData?.data]);
+    console.log(getAllData?.data);
+    if (isInsertImageSuccess) {
+      toast.success("Image uploaded successfully!");
+      setAllImages(getAllData?.data);
+    }
+  }, [getAllData?.data, isInsertImageSuccess]);
+
+  useEffect(() => {
+    if (isInsertImageError) {
+      toast.error(insertImageError?.data?.message || "Something went wrong!");
+    }
+  }, [isInsertImageError, insertImageError]);
+
+  useEffect(() => {
+    if (isDeleteImagesSuccess) {
+      toast.success("Image deleted successfully!");
+      setAllImages(getAllData?.data);
+    }
+  }, [getAllData?.data, isDeleteImagesSuccess]);
+
+  useEffect(() => {
+    if (isDeleteImagesError) {
+      toast.error(deleteImagesError?.data?.message || "Something went wrong!");
+    }
+  }, [isDeleteImagesError, deleteImagesError]);
 
   return (
     <main className="main-container main-section">
