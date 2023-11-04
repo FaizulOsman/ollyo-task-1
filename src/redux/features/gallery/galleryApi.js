@@ -15,6 +15,7 @@ const galleryApi = api.injectEndpoints({
       query: () => ({
         url: `/gallery`,
       }),
+      providesTags: ["gallery"],
     }),
 
     deleteImages: builder.mutation({

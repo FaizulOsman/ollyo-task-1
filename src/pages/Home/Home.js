@@ -69,12 +69,13 @@ const Home = () => {
 
   useEffect(() => {
     setAllImages(getAllData?.data);
-    console.log(getAllData?.data);
+  }, [getAllData?.data]);
+
+  useEffect(() => {
     if (isInsertImageSuccess) {
       toast.success("Image uploaded successfully!");
-      setAllImages(getAllData?.data);
     }
-  }, [getAllData?.data, isInsertImageSuccess]);
+  }, [isInsertImageSuccess]);
 
   useEffect(() => {
     if (isInsertImageError) {
@@ -85,9 +86,8 @@ const Home = () => {
   useEffect(() => {
     if (isDeleteImagesSuccess) {
       toast.success("Image deleted successfully!");
-      setAllImages(getAllData?.data);
     }
-  }, [getAllData?.data, isDeleteImagesSuccess]);
+  }, [isDeleteImagesSuccess]);
 
   useEffect(() => {
     if (isDeleteImagesError) {
