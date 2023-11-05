@@ -10,6 +10,10 @@
     align-items: center;
     padding: 20px 40px;
 
+    @include largeMobile {
+      padding: 20px;
+    }
+
     .heading {
       margin: 0;
     }
