@@ -7,6 +7,7 @@ import {
 } from "../../redux/features/gallery/galleryApi";
 import ImageComponent from "../../components/ImageComponent";
 import toast from "react-hot-toast";
+import Loader from "../../components/Loader";
 
 const Home = () => {
   const [allImages, setAllImages] = useState([]);
@@ -104,28 +105,33 @@ const Home = () => {
         </h3>
       </div>
       <div className="images-section">
-        {allImages?.map((image, index) => (
-          <label
-            key={index}
-            className={`single-image ${index === 0 ? "wider" : ""}`}
-          >
-            <ImageComponent
-              draggable
-              onDragStart={() => (dragPerson.current = index)}
-              onDragEnter={() => (draggedOverPerson.current = index)}
-              onDragEnd={handleSort}
-              onDragOver={(e) => e.preventDefault()}
-              image={image}
-            />
-            <div className="check">
-              <input
-                type="checkbox"
-                onClick={(e) => handleCheck(image?.id, e)}
+        {allImages?.length > 0 ? (
+          allImages?.map((image, index) => (
+            <label
+              key={index}
+              className={`single-image ${index === 0 ? "wider" : ""}`}
+            >
+              <ImageComponent
+                draggable
+                onDragStart={() => (dragPerson.current = index)}
+                onDragEnter={() => (draggedOverPerson.current = index)}
+                onDragEnd={handleSort}
+                onDragOver={(e) => e.preventDefault()}
+                image={image}
               />
-              <span className="checkmark"></span>
-            </div>
-          </label>
-        ))}
+              <div className="check">
+                <input
+                  type="checkbox"
+                  onClick={(e) => handleCheck(image?.id, e)}
+                />
+                <span className="checkmark"></span>
+              </div>
+            </label>
+          ))
+        ) : (
+          <Loader />
+        )}
+
         <ImageUpload handleUploadImage={handleUploadImage} />
       </div>
     </main>
