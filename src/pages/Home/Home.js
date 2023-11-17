@@ -99,7 +99,17 @@ const Home = () => {
   return (
     <main className="main-container main-section">
       <div className="header">
-        <h1 className="heading">Gallery</h1>
+        {selectedImages?.length > 0 ? (
+          <strong className="selected-heading">
+            <div className="check">
+              <input type="checkbox" defaultChecked={true} />
+              <span className="checkmark"></span>
+            </div>
+            {selectedImages?.length} File Selected
+          </strong>
+        ) : (
+          <h4 className="heading">Gallery</h4>
+        )}
         <h3 onClick={() => handleDeleteImages()} className="delete__btn">
           Delete files
         </h3>
